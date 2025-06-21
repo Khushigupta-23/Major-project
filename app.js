@@ -18,6 +18,8 @@ app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));//for req.params
 app.use(methodOverride("_method"));
+app.engine("ejs",ejsMate);
+app.use(express.static(path.join(__dirname,"/public")));
 
 app.get("/",(req,res)=>{
     res.send("hii, i am root");
@@ -66,8 +68,8 @@ app.get("/listing/:id/edit", async (req,res)=>{
  app.delete("/listing/:id", async(req,res)=>{
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
- })
+    console.log(deletedListing);    
+ });
 // app.get("/testListing", async (req,res)=>{
 //     let sampleListing = new Listing({
 //         title: "My new villa",
