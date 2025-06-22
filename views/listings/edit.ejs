@@ -1,19 +1,39 @@
 <% layout("layouts/boilerplate") %>
     <h3>Edit Your Listing Here...</h3>
     <form method="POST" action="/listing/<%= listing._id %>?_method=PUT">
-        <input type="text" name="listing[title]" value="<%= listing.title %>">
-        <br><br>
-        <textarea name="listing[description]" value="<%= listing.description %>"></textarea>
-        <br><br>
-        <input name="listing[image]" value="<%= listing.image %>">
-        <br><br>
-        <input type="number" name="listing[price]" value="<%= listing.price %>">
-        <br><br>
-        <input type="text" name="listing[location]" value="<%= listing.location %>">
-        <br><br>
-        <input type="text" name="listing[country]" value="<%= listing.country %>">
-        <br><br>
-        <button>ADD</button>
+        <div class="mb-3">
+            <label for="title" class="for-label">Title</label>
+            <input type="text" name="listing[title]" class="form-control" value="<%= listing.title %>">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="for-label">Description</label>
+            <textarea name="listing[description]" class="form-control" value="<%= listing.description %>"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="for-label">Image Link</label>
+            <input name="listing[image]" class="form-control" value="<%= listing.image %>">
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="for-label">Price</label>
+            <input type="number" name="listing[price]" class="form-control" value="<%= listing.price %>">
+        </div>
+
+        <div class="mb-3">
+            <label for="location" class="for-label">Location</label>
+            <input type="text" name="listing[location]" class="form-control" value="<%= listing.location %>">
+        </div>
+
+
+        <div class="mb-3">
+            <label for="country" class="for-label">Country</label>
+            <input type="text" name="listing[country]" class="form-control" value="<%= listing.country %>">
+        </div>
+
+
+        <button class="btn btn-dark edit-btn">Edit</button><br><br>
     </form>
-</body>
-</html>
+    </body>
+
+    </html>
