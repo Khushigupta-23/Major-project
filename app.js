@@ -5,6 +5,8 @@ const Listing = require("./models/listing.js");
 const path = require("path") // ejs
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const Review = require("./models/review.js");
+
 
 main()
 .then(console.log("connection sucessfully"))
@@ -44,7 +46,7 @@ app.get("/listing/:id", async(req,res)=>{
 });
 
 // Create Route -> after creating a list using new route this route add the list on index page
-app.post("/listing" , async (req,res)=>{
+app.post("/listing" ,async (req,res)=>{
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listing");
@@ -70,6 +72,24 @@ app.get("/listing/:id/edit", async (req,res)=>{
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);    
  });
+
+
+// Reviews 
+//POST Route ->
+
+app.post("/listing/:id/reviews" ,async(req,res) =>{
+   let listing = await Listing.findById(req.params.id);
+   let newReview = new Review(req.body.review);
+
+   listing.review.push(newReview);
+
+   await newReview.save();
+   await listing.save();
+
+   console.log("new Review saved");
+   res.redirect(`/listing/${listing._id}`);
+});
+
 // app.get("/testListing", async (req,res)=>{
 //     let sampleListing = new Listing({
 //         title: "My new villa",
@@ -82,7 +102,6 @@ app.get("/listing/:id/edit", async (req,res)=>{
 
 //     await sampleListing.save().then((res)=>{console.log("Data Save")}).catch((err)=>{console.log(err)});
 // });
-
 
 
 app.listen(8080,()=>{
