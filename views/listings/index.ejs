@@ -6,7 +6,7 @@
 <% for(let listing of allListings){ %>
     <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
         <a href="/listing/<%= listing._id %>" class="listing-link" style="text-decoration: none; color: inherit;">
-            <div class="card" style="width: 100%;">
+            <div class="card listing-card" style="width: 100%;">
                 <img src="<%= listing.image %>" class="card-img-top" alt="Listing_img" style="height: 20rem; object-fit: cover;">
                 <div class="card-img-overlay"></div>
                 <div class="card-body">

@@ -6,6 +6,9 @@ const path = require("path") // ejs
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const Review = require("./models/review.js");
+// const expressError = require("./utils/expressError.js");
+const {listingSchema} = require("./schema.js");
+const {reviewSchema} = require("./schema.js");
 
 
 main()
@@ -41,12 +44,14 @@ app.get("/listing/new",(req,res)=>{
 // Show Route
 app.get("/listing/:id", async(req,res)=>{
     let {id} = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews");
     res.render("listings/show.ejs", {listing});
 });
 
 // Create Route -> after creating a list using new route this route add the list on index page
 app.post("/listing" ,async (req,res)=>{
+    let result = listingSchema.validate(req.body);
+    console.log(result);
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listing");
@@ -61,6 +66,8 @@ app.get("/listing/:id/edit", async (req,res)=>{
 
 // Update Route -> update the edit details
  app.put("/listing/:id", async (req,res)=>{
+    let result = listingSchema.validate(req.body);
+    console.log(result);
     let {id} = req.params;
     await Listing.findByIdAndUpdate(id,{...req.body.listing});
     res.redirect("/listing");
@@ -78,16 +85,27 @@ app.get("/listing/:id/edit", async (req,res)=>{
 //POST Route ->
 
 app.post("/listing/:id/reviews" ,async(req,res) =>{
+   let result = reviewSchema.validate(req.body);
+   console.log(result);
    let listing = await Listing.findById(req.params.id);
    let newReview = new Review(req.body.review);
 
-   listing.review.push(newReview);
+   listing.reviews.push(newReview);
 
    await newReview.save();
    await listing.save();
 
    console.log("new Review saved");
    res.redirect(`/listing/${listing._id}`);
+});
+
+//Delete Route ->
+
+app.delete("/listing/:id/reviews/:reviewId", async (req, res) => {
+    const { id, reviewId } = req.params;
+    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/listing/${id}`);
 });
 
 // app.get("/testListing", async (req,res)=>{
@@ -103,6 +121,14 @@ app.post("/listing/:id/reviews" ,async(req,res) =>{
 //     await sampleListing.save().then((res)=>{console.log("Data Save")}).catch((err)=>{console.log(err)});
 // });
 
+// app.all("*",(req,res,next)=>{
+//     next(new expressError(404,"Page Not Found"));
+// });
+
+// app.use((err,req,res,next)=>{
+//     let {statusCode, message} = err;
+//     res.status(statusCode).send(message);
+// });
 
 app.listen(8080,()=>{
     console.log("server is listning on 8080");
