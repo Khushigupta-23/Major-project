@@ -10,6 +10,9 @@ const Review = require("./models/review.js");
 const {listingSchema} = require("./schema.js");
 const {reviewSchema} = require("./schema.js");
 
+const listings = require("./routes/listing.js");
+const reviews = require("./routes/review.js");
+
 
 main()
 .then(console.log("connection sucessfully"))
@@ -26,87 +29,13 @@ app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
+
 app.get("/",(req,res)=>{
     res.send("hii, i am root");
 });
 
-// Index Route -> listing all 
-app.get("/listing", async (req,res)=>{
-   const allListings = await Listing.find({});
-   res.render("listings/index.ejs", {allListings});
-});
-
-// NEW Route ->add new list
-app.get("/listing/new",(req,res)=>{
-    res.render("listings/new.ejs");
-});
-
-// Show Route
-app.get("/listing/:id", async(req,res)=>{
-    let {id} = req.params;
-    const listing = await Listing.findById(id).populate("reviews");
-    res.render("listings/show.ejs", {listing});
-});
-
-// Create Route -> after creating a list using new route this route add the list on index page
-app.post("/listing" ,async (req,res)=>{
-    let result = listingSchema.validate(req.body);
-    console.log(result);
-    const newListing = new Listing(req.body.listing);
-    await newListing.save();
-    res.redirect("/listing");
-});
-
-// Edit Route
-app.get("/listing/:id/edit", async (req,res)=>{
-    let {id} = req.params;
-    const listing = await Listing.findById(id);
-    res.render("listings/edit.ejs", {listing});
-});
-
-// Update Route -> update the edit details
- app.put("/listing/:id", async (req,res)=>{
-    let result = listingSchema.validate(req.body);
-    console.log(result);
-    let {id} = req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing});
-    res.redirect("/listing");
- });
-
- // Delete Route
- app.delete("/listing/:id", async(req,res)=>{
-    let { id } = req.params;
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);    
- });
-
-
-// Reviews 
-//POST Route ->
-
-app.post("/listing/:id/reviews" ,async(req,res) =>{
-   let result = reviewSchema.validate(req.body);
-   console.log(result);
-   let listing = await Listing.findById(req.params.id);
-   let newReview = new Review(req.body.review);
-
-   listing.reviews.push(newReview);
-
-   await newReview.save();
-   await listing.save();
-
-   console.log("new Review saved");
-   res.redirect(`/listing/${listing._id}`);
-});
-
-//Delete Route ->
-
-app.delete("/listing/:id/reviews/:reviewId", async (req, res) => {
-    const { id, reviewId } = req.params;
-    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/listing/${id}`);
-});
+app.use("/listing",listings);
+app.use("/listing/:id/reviews",reviews);
 
 // app.get("/testListing", async (req,res)=>{
 //     let sampleListing = new Listing({
