@@ -1,9 +1,20 @@
 const Listing = require("../models/listing.js");
 const {listingSchema} = require("../schema.js");
 
-module.exports.Index = async (req,res)=>{
-   const allListings = await Listing.find({});
-   res.render("listings/index.ejs", {allListings});
+module.exports.Index = async (req, res) => {
+    let { category, search } = req.query;
+    let query = {};
+
+    if (category) {
+        query.category = category;
+    }
+
+    if (search) {
+        query.title = new RegExp(search, 'i');
+    }
+
+    const allListings = await Listing.find(query);
+    res.render("listings/index.ejs", { allListings });
 }
 
 module.exports.renderNewForm =  (req,res)=>{

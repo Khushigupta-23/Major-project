@@ -1,6 +1,7 @@
 <% layout("layouts/boilerplate") %>
 
-    <form method="POST" action="/listing/<%= listing._id %>?_method=PUT" novalidate class="needs-validation mt-3 offset-3" enctype="multipart/form-data">
+    <form method="POST" action="/listing/<%= listing._id %>?_method=PUT" novalidate
+        class="needs-validation mt-3 offset-3" enctype="multipart/form-data">
         <h3>Edit Your Listing Here...</h3>
         <div class="mb-3">
             <label for="title" class="for-label">Title</label>
@@ -31,6 +32,26 @@
             <div class="valid-feedback">correct price</div>
             <div class="invalid-feedback">Please enter a valid price</div>
         </div>
+
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select name="listing[category]" class="form-select" required>
+                <option disabled>Select category</option>
+                <option value="Rooms" <%=listing.category==="Rooms" ? "selected" : "" %>>Rooms</option>
+                <option value="Castle" <%=listing.category==="Castle" ? "selected" : "" %>>Castle</option>
+                <option value="Mountains" <%=listing.category==="Mountains" ? "selected" : "" %>>Mountains</option>
+                <option value="Iconic City" <%=listing.category==="Iconic City" ? "selected" : "" %>>Iconic City</option>
+                <option value="Farms" <%=listing.category==="Farms" ? "selected" : "" %>>Farms</option>
+                <option value="Camping" <%=listing.category==="Camping" ? "selected" : "" %>>Camping</option>
+                <option value="Arctic" <%=listing.category==="Arctic" ? "selected" : "" %>>Arctic</option>
+                <option value="Amazing Pools" <%=listing.category==="Amazing Pools" ? "selected" : "" %>>Amazing Pools
+                </option>
+                <option value="Trending" <%=listing.category==="Trending" ? "selected" : "" %>>Trending</option>
+            </select>
+            <div class="valid-feedback">Category selected</div>
+            <div class="invalid-feedback">Please select a category</div>
+        </div>
+
 
         <div class="mb-3">
             <label for="location" class="for-label">Location</label>

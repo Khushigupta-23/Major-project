@@ -96,6 +96,7 @@ app.use("/",userRouter);
 //     res.status(statusCode).send(message);
 // });
 
+
 app.listen(8080,()=>{
     console.log("server is listning on 8080");
 });
