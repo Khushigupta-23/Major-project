@@ -5,27 +5,26 @@ const {listingSchema} = require("../schema.js");
 const Listing = require("../models/listing.js");
 const { isLoggedIn , isOwner } = require("../middleware.js");
 const listingController = require("../controllers/listings.js");
+const multer = require("multer");
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
 
-// Index Route -> listing all 
-router.get("/", listingController.Index);
+
+router
+.route("/")
+.get(listingController.Index)
+.post(isLoggedIn ,upload.single("listing[image]") ,listingController.Create);
 
 // NEW Route ->add new list
 router.get("/new",isLoggedIn ,listingController.renderNewForm);
 
-// Show Route
-router.get("/:id", listingController.Show);
-
-// Create Route -> after creating a list using new route this route add the list on index page
-router.post("/" , isLoggedIn ,listingController.Create);
+router
+.route("/:id")
+.get(listingController.Show)
+.put(isLoggedIn ,isOwner ,upload.single("image") , listingController.Update)
+.delete(isLoggedIn, isOwner, listingController.Delete);
 
 // Edit Route
 router.get("/:id/edit", isLoggedIn , listingController.Edit);
-
-// Update Route -> update the edit details
- router.put("/:id", isLoggedIn , listingController.Update);
-
- // Delete Route
- router.delete("/:id", isLoggedIn, isOwner, listingController.Delete);
-
 
 module.exports = router;

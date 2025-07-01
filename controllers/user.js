@@ -1,5 +1,7 @@
 const { saveRedirectUrl } = require("../middleware.js");
 const userController = require("../controllers/user.js");
+const User = require("../models/user.js");
+
 
 
 module.exports.getSignup = (req, res) => {

@@ -1,3 +1,9 @@
+if(process.env.NODE_ENV != "production"){
+    require('dotenv').config();
+}
+console.log(process.env);
+
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -20,6 +26,7 @@ main()
 .then(console.log("connection sucessfully"))
 .catch((err)=>{console.log(err)});
 
+// hello
 async function main(){
     await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
 }
@@ -31,9 +38,9 @@ app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-app.get("/",(req,res)=>{
-    res.send("hii, i am root");
-});
+// app.get("/",(req,res)=>{
+//     res.send("hii, i am root");
+// });
 
 app.use(session({
     secret: "luckysonimysecret",
