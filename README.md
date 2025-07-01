@@ -1,4 +1,4 @@
-# 🏡 Vacation Rental Listing App (Minor Project)
+# 🏡 Vacation Rental Listing App (Major Project)
 
 This is a full-stack Node.js project for a Vacation Rental platform — inspired by Airbnb. It allows users to create, edit, and explore listings of unique vacation homes, with features like image upload, authentication, category filters, and more.
 
