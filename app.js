@@ -43,9 +43,7 @@ app.use(express.static(path.join(__dirname,"/public")));
 // });
 
 app.use(session({
-    crypto : {
-        secret : process.env.SECRET,
-    },
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie : {
